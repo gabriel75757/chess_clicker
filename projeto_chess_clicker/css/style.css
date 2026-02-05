@@ -1,0 +1,528 @@
+/* --- CONFIGURAÇÕES GERAIS E FUNDO --- */
+body {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* Fundo com um degradê radial sutil */
+    background: radial-gradient(circle at center, rgb(60, 60, 60) 0%, rgb(30, 30, 30) 100%);
+    padding-top: 100px;
+    color: white;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* --- CABEÇALHO (Estilo "Glassmorphism") --- */
+header {
+    background: rgba(94, 137, 74, 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+header h1 {
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+    margin: 0;
+    padding: 10px 0;
+    color: white;
+}
+
+#app-header nav {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+#app-header a {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+#app-header a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+#app-header a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: white;
+    transition: width 0.3s;
+}
+
+#app-header a:hover::after {
+    width: 100%;
+}
+
+/* --- SCORE E STATUS --- */
+body > p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+    text-shadow: 1px 1px 2px black;
+    font-weight: 300;
+    color: white;
+}
+
+body > p span[id] {
+    font-weight: bold;
+    color: #7db265;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+}
+
+/* --- CONTAINER DO JOGO --- */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 20px;
+}
+
+/* --- ÁREA CENTRAL (TABULEIRO) --- */
+#gameArea {
+    width: 450px;
+    height: 450px;
+    position: relative;
+    background-color: rgb(196, 224, 250);
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 15px;
+    box-shadow: 
+        0 0 0 8px #2d2d2d,
+        0 0 0 12px #5e894a,
+        0 10px 30px rgba(0,0,0,0.7);
+    overflow: hidden;
+    transition: transform 0.1s;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameArea:active {
+    transform: scale(0.98);
+}
+
+#gameArea img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* --- BOTÕES DAS PEÇAS (CARDS) --- */
+.black-pieces,
+.white-pieces {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 340px;
+}
+
+.white,
+.black {
+    width: 100%;
+    height: auto;
+    min-height: 90px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    align-items: center;
+    gap: 15px;
+    background: linear-gradient(145deg, #5e894a, #4a6b3a);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    box-shadow: 
+        0 4px 0 #2e4424,
+        0 5px 10px rgba(0,0,0,0.3);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    font-size: 40px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.white::before, .black::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.white:hover::before, .black:hover::before {
+    left: 100%;
+}
+
+.white:not(.disabled):hover,
+.black:not(.disabled):hover {
+    transform: translateY(-4px);
+    background: linear-gradient(145deg, #6ba152, #557a41);
+    box-shadow: 
+        0 8px 0 #2e4424,
+        0 15px 20px rgba(0,0,0,0.4);
+    cursor: pointer;
+}
+
+.white:active, .black:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #2e4424, 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 16px;
+    text-shadow: none;
+}
+
+.title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #f0f0f0;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.description {
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    color: #cfdac6;
+    background: rgba(0,0,0,0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.quantity {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: rgba(255,255,255,0.2);
+    margin-left: 0;
+    padding-left: 0;
+    text-shadow: none;
+}
+
+.white:not(.disabled):hover .quantity,
+.black:not(.disabled):hover .quantity {
+    color: rgba(255,255,255,1);
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* --- ESTADOS DE DESABILITADO --- */
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.8);
+    box-shadow: none !important;
+    background: #3a3a3a !important;
+    border: 1px solid #555;
+    transform: none !important;
+}
+
+/* --- FLOATING TEXT --- */
+.floating-text {
+    position: absolute;
+    font-family: 'Cinzel', serif;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #a8e686;
+    text-shadow: 0 0 10px rgba(0,0,0,1);
+    pointer-events: none;
+    z-index: 2000;
+    animation: floatUpAndFade 1s forwards;
+}
+
+@keyframes floatUpAndFade {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(1.5); opacity: 0; }
+}
+
+/* --- PULSO DO TABULEIRO --- */
+.pulse {
+    animation: boardPulse 0.3s;
+}
+@keyframes boardPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 8px #2d2d2d, 0 0 0 12px #5e894a; }
+    50% { transform: scale(1.02); box-shadow: 0 0 0 8px #2d2d2d, 0 0 0 15px #a8e686; }
+    100% { transform: scale(1); box-shadow: 0 0 0 8px #2d2d2d, 0 0 0 12px #5e894a; }
+}
+
+/* --- POPUPS CORRIGIDOS --- */
+.popup-window {
+    position: fixed; 
+    top: 0;          
+    left: 0;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    
+    background: #2d2d2d;
+    border: 2px solid #5e894a;
+    border-top: none; 
+    border-radius: 0 0 15px 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    color: white;
+    padding: 30px;
+    z-index: 3000;
+    
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    pointer-events: none; 
+}
+
+.popup-window.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto; 
+}
+
+.popup-window h3 {
+    font-family: 'Cinzel', serif;
+    color: #5e894a;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.popup-window button.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #777;
+    transition: 0.3s;
+    cursor: pointer;
+}
+.popup-window button.close-btn:hover { color: white; }
+
+/* Botões de Toggle e Idioma */
+.option-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 18px;
+    justify-content: center;
+}
+
+.btn-toggle {
+    width: 80px;
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    background-color: #d9534f;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 0 #222;
+}
+.btn-toggle:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #222;
+}
+.btn-toggle.on {
+    background-color: #4a6b3a; 
+}
+
+/* Botões de Idioma */
+.language-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.btn-language {
+    background-color: #4a6b3a;
+    color: white;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 0 #222;
+}
+
+.btn-language:hover {
+    background-color: #5e894a;
+    transform: scale(1.05);
+}
+
+.btn-language:active {
+    transform: scale(0.95) translateY(2px);
+    box-shadow: 0 1px 0 #222;
+}
+
+/* --- CASCATA E BÔNUS --- */
+#pawn-waterfall {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 2000; pointer-events: none; overflow: hidden;
+}
+.falling-pawn {
+    position: absolute; top: -50px; color: #4a6b3a;
+    font-size: 20px; opacity: 0.3; user-select: none;
+    animation: fall linear; filter: blur(1px);
+}
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(360deg); }
+}
+
+.golden-pawn {
+    position: absolute; top: -50px; font-size: 60px;
+    user-select: none; color: #FFD700;
+    text-shadow: 0 0 20px #FFD700;
+    animation: fall linear; 
+    pointer-events: auto; cursor: pointer;
+    z-index: 2001; transition: transform 0.2s ease;
+}
+.golden-pawn:hover { transform: scale(1.3); filter: brightness(1.2); }
+
+
+/* --- ESTILO DO PRESTÍGIO --- */
+
+/* Fundo escuro que cobre a tela inteira */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+/* A caixa da janela */
+.modal-content.prestige-theme {
+    background: #1a1a1a;
+    border: 2px solid #ffd700; /* Borda Dourada */
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.prestige-info-box {
+    background: rgba(255, 215, 0, 0.05);
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.btn-confirm {
+    background: #ffd700;
+    color: #1a1a1a;
+    font-weight: bold;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: transform 0.2s;
+}
+
+.btn-confirm:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #aaa;
+    border: 1px solid #555;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-cancel:hover {
+    color: white;
+    border-color: white;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- TEXTO FLUTUANTE DOURADO (BÔNUS) --- */
+.golden-floating-text {
+    position: fixed; /* Fixed para garantir que apareça onde o mouse está */
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem; /* Maior que o normal */
+    font-weight: bold;
+    color: #FFD700; /* Dourado */
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 2px 2px 0px black;
+    pointer-events: none; /* O mouse ignora o texto */
+    z-index: 3000; /* Fica acima de tudo */
+    animation: floatUpGolden 1.5s ease-out forwards;
+}
+
+@keyframes floatUpGolden {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100px) scale(1.2); /* Sobe mais alto e cresce */
+        opacity: 0;
+    }
+}
